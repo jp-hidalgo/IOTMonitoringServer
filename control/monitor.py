@@ -52,9 +52,9 @@ def analyze_data():
 
         if item["check_value"] > max_value or item["check_value"] < min_value  :
             alert = True
-        if item["check_value"]<hum_danger and item["measurement__name"]=="humedad":
+        if item["check_value"]<hum_danger and variable=="humedad":
             alerta_humedad = True
-        if item["check_value"]>temp_danger and item['measurement__name']=="temperatura":
+        if item["check_value"]>temp_danger and variable=="temperatura":
             alerta_temperatura= True
         if alerta_temperatura and alerta_humedad:
             message = "ALERT NIVELES PELIGROSOS DE TEMPERATURA Y HUMEDAD"
