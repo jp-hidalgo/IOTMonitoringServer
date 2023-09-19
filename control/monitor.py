@@ -59,7 +59,7 @@ def analyze_data():
         if alerta_temperatura and alerta_humedad:
             message = "ALERT NIVELES PELIGROSOS DE TEMPERATURA Y HUMEDAD"
             topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
-            print(datetime.now(), "Sending alert to {} {}".format(topic, variable))
+            print(datetime.now(), "Sending alert with message {}".format(message))
             client.publish(topic, message)
             alerts += 1
             alerta_humedad = False
