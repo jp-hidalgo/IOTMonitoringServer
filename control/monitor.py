@@ -56,7 +56,7 @@ def analyze_data():
             alerta_humedad = True
         if item["check_value"]>temp_danger and variable=="temperatura":
             alerta_temperatura= True
-        if alerta_temperatura and alerta_humedad:
+        if alerta_temperatura or alerta_humedad:
             message = "ALERT NIVELES PELIGROSOS DE TEMPERATURA Y HUMEDAD"
             topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
             print(datetime.now(), "Sending alert with message {}".format(message))
