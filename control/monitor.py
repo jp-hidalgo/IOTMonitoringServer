@@ -33,21 +33,37 @@ def analyze_data():
                 'station__location__state__name',
                 'station__location__country__name')
     alerts = 0
+    alerta_humedad = False
+    alerta_temperatura = False
     for item in aggregation:
         alert = False
+        
 
         variable = item["measurement__name"]
         max_value = item["measurement__max_value"] or 0
         min_value = item["measurement__min_value"] or 0
+        temp_danger = 25
+        hum_danger = 50
 
         country = item['station__location__country__name']
         state = item['station__location__state__name']
         city = item['station__location__city__name']
         user = item['station__user__username']
 
-        if item["check_value"] > max_value or item["check_value"] < min_value:
+        if item["check_value"] > max_value or item["check_value"] < min_value  :
             alert = True
-
+        if item["check_value"]<hum_danger and item["measurement__name"]=="humedad":
+            alerta_humedad = True
+        if item["check_value"]>temp_danger and item['measurement__name']=="temperatura":
+            alerta_temperatura= True
+        if alerta_temperatura and alerta_humedad:
+            message = "ALERT NIVELES PELIGROSOS DE TEMPERATURA Y HUMEDAD"
+            topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
+            print(datetime.now(), "Sending alert to {} {}".format(topic, variable))
+            client.publish(topic, message)
+            alerts += 1
+            alerta_humedad = False
+            alerta_temperatura = False
         if alert:
             message = "ALERT {} {} {}".format(variable, min_value, max_value)
             topic = '{}/{}/{}/{}/in'.format(country, state, city, user)
